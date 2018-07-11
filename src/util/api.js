@@ -3,7 +3,7 @@ export default class {
     return fetch('http://localhost:3333/water');
   }
 
-  static getFacility() {
+  static getFacilities() {
     return fetch('http://localhost:3333/facilities');
   }
 }

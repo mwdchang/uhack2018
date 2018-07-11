@@ -17,6 +17,7 @@ import HeaderBar from './header-bar.vue';
 import MapPanel from './map-panel.vue';
 import FacilityDialog from './facility-dialog.vue';
 
+
 /* template */
 export default {
   name: 'home',
