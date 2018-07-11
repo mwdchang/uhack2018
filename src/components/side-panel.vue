@@ -3,7 +3,7 @@
     <!-- Show waters -->
     <div v-if="!currentLocation">
       <div>Water Measures</div>
-      <div v-for="spark of waterData" :key="spark.id">
+      <div v-for="(spark, idx) of waterData" :key="idx">
         <div @click="switchLocation(spark)">
           <spark-line :data="spark"/>
         </div>
@@ -13,7 +13,7 @@
     <!-- Show facilities -->
     <div v-if="currentLocation">
       <div>Facility Measures</div>
-      <div v-for="spark of facilityData" :key="spark.id">
+      <div v-for="(spark, idx) of facilityData" :key="idx">
         <div @click="switchFacility(spark)">
           <spark-line :data="spark"/>
         </div>
@@ -25,10 +25,10 @@
 
 
 <script>
+import _ from 'lodash';
 import {  mapActions, mapGetters } from 'vuex';
 
 import SparkLine from './spark-line.vue';
-import Mock from '../util/mock.js';
 import API from '../util/api.js';
 
 export default {
@@ -36,24 +36,15 @@ export default {
   components: {
     SparkLine
   },
-  data: () => ({
-    waterData: [],
-    facilityData: []
-  }),
   mounted() {
     API.getWater().then(d=>d.json()).then( waters => {
-      // TODO: FAKE
       waters.forEach (w => {
-        w.data = [];
-        for (let i=0; i < 10; i++) {
-          w.data.push( Math.random() * 10);
-        }
-        const lastIdx = w.data.length - 1;
+        const lastIdx = (w.data.length - 1);
         const delta = w.data[lastIdx] - w.data[0];
-        w.delta = delta.toFixed(2);
-
-       });
-      this.waterData = waters;
+        w.delta = delta;
+      });
+      this.setWaters(_.sortBy(waters, (d) => -d.delta));
+      console.log('waters ready');
     });
 
     API.getFacilities().then(d=>d.json()).then( facilities => {
@@ -65,24 +56,30 @@ export default {
         }
         const lastIdx = f.data.length - 1;
         const delta = f.data[lastIdx] - f.data[0];
-        f.delta = delta.toFixed(2);
-
+        f.delta = delta;
       });
-      this.facilityData = facilities;
+
+      this.setFacilities( _.sortBy(facilities, (d) => -d.delta));
+      console.log('facilities ready');
     });
+
   },
   computed: {
     ...mapGetters({
       currentLocation: 'currentLocation',
       currentFacility: 'currentFacility',
-      currentChemical: 'currentChemical'
+      currentChemical: 'currentChemical',
+      waterData: 'waters',
+      facilityData: 'facilities'
     })
   },
   methods: {
     ...mapActions({
       setCurrentLocation: 'setCurrentLocation',
       setCurrentFacility: 'setCurrentFacility',
-      setCurrentChemical: 'setCurrentChemical'
+      setCurrentChemical: 'setCurrentChemical',
+      setWaters: 'setWaters',
+      setFacilities: 'setFacilities'
     }),
     switchLocation(spark) {
       this.setCurrentLocation(spark);

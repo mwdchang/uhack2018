@@ -48,8 +48,8 @@ func TestSites() []MeasuredLocation {
 	lines := strings.Split(string(dat), "\n")[1:]
 	for _, line := range lines {
 		fields := strings.Split(line, ",")
-		lat, _ := strconv.ParseFloat(strings.TrimSpace(fields[3]), 64)
-		lon, _ := strconv.ParseFloat(strings.TrimSpace(fields[4]), 64)
+		lon, _ := strconv.ParseFloat(strings.TrimSpace(fields[3]), 64)
+		lat, _ := strconv.ParseFloat(strings.TrimSpace(fields[4]), 64)
 		mls = append(mls, MeasuredLocation{
 			Lat:  lat,
 			Lon:  lon,

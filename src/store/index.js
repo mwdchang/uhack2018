@@ -8,12 +8,16 @@ export const storeConfig = {
     currentScenario: null,
     currentLocation: null,
     currentFacility: null,
-    currentChemical: null
+    currentChemical: null,
+    waters: null,
+    facilities: null
   },
   getters: {
     currentLocation: state => state.currentLocation,
     currentFacility: state => state.currentFacility,
-    currentChemical: state => state.currentChemical
+    currentChemical: state => state.currentChemical,
+    waters: state => state.waters,
+    facilities: state => state.facilities
   },
   actions: {
     setCurrentFacility({ commit }, o) {
@@ -24,7 +28,13 @@ export const storeConfig = {
     },
     setCurrentChemical({ commit }, o) {
       commit('setCurrentChemical', o);
-    }
+    },
+    setWaters({ commit }, o) {
+      commit('setWaters', o);
+    },
+    setFacilities({ commit }, o) {
+      commit('setFacilities', o);
+    },
   },
   mutations: {
     setCurrentFacility(state, o) {
@@ -35,6 +45,12 @@ export const storeConfig = {
     },
     setCurrentChemical(state, o) {
       state.currentChemical = o;
+    },
+    setWaters(state, o) {
+      state.waters = o;
+    },
+    setFacilities(state, o) {
+      state.facilities = o;
     }
   }
 };
