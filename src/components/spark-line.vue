@@ -1,7 +1,8 @@
 <template>
   <div ref="container" class="spark-container">
-    <div>Name</div>
+    <div class="chemical-label">{{data.chemical}}</div>
     <svg class="chart"></svg>
+    <div class="name-label">{{data.name}}</div>
   </div>
 </template>
 
@@ -21,7 +22,7 @@ export default {
     const chart = d3.select(this.$refs.container).select('.chart');
     chart.attr('width', W +'px');
     chart.attr('height', H +'px');
-    const data = [1, 3, 5, 7, 3, 2, 5, 6, 8, 8];
+    const data = this.data.data;
 
     const yScale = d3.scaleLinear().range([H, 0]).domain([0, 10]);
     const xScale = d3.scaleLinear().range([W, 0]).domain([0, 10]);
@@ -30,10 +31,19 @@ export default {
       .x(function(d, i) { return xScale(i); })
       .y(function(d) { return yScale(d); });
 
-    chart.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", valueFn);
+
+    const type = this.data.type;
+    if (type === 'water') {
+      chart.append("path")
+        .data([data])
+        .attr("class", "line-water")
+        .attr("d", valueFn);
+    } else {
+      chart.append("path")
+        .data([data])
+        .attr("class", "line-facility")
+        .attr("d", valueFn);
+    }
 
   }
 
@@ -46,9 +56,23 @@ export default {
   flex-direction: row;
 }
 
-.line {
+.line-facility {
+  fill: none;
+  stroke: red;
+  stroke-width: 2px;
+}
+
+.line-water {
   fill: none;
   stroke: steelblue;
   stroke-width: 2px;
+}
+
+.chemical-label {
+  width: 80px;
+}
+
+.name-label {
+  width: 120px;
 }
 </style>

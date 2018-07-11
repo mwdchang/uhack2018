@@ -3,16 +3,17 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-
 export const storeConfig = {
   state: {
     currentScenario: null,
     currentLocation: null,
-    currentFacility: null
+    currentFacility: null,
+    currentChemical: null
   },
   getters: {
     currentLocation: state => state.currentLocation,
-    currentFacility: state => state.currentFacility
+    currentFacility: state => state.currentFacility,
+    currentChemical: state => state.currentChemical
   },
   actions: {
     setCurrentFacility({ commit }, o) {
@@ -21,6 +22,9 @@ export const storeConfig = {
     setCurrentLocation({ commit }, o) {
       commit('setCurrentLocation', o);
     },
+    setCurrentChemical({ commit }, o) {
+      commit('setCurrentChemical', o);
+    }
   },
   mutations: {
     setCurrentFacility(state, o) {
@@ -28,6 +32,9 @@ export const storeConfig = {
     },
     setCurrentLocation(state, o) {
       state.currentLocation = o;
+    },
+    setCurrentChemical(state, o) {
+      state.currentChemical = o;
     }
   }
 };
