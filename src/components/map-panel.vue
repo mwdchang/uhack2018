@@ -57,63 +57,38 @@
       },
 
       addLocationMarkers() {
-        const circleMarkerRadius = 3000;
-        let circleMarkers = [];
-        const mockF = Mock.mockF();
-        mockF.forEach( facility => {
-          const circleMarker = L.circle([facility.lat, facility.lon], {
-            color: 'red',
-            fillColor: 'red',
-            fillOpacity: 0.5,
-            radius: circleMarkerRadius
-          }).addTo(this.map);
-          circleMarkers.push(circleMarker);
-        });
-
         API.getWater().then(d=>d.json()).then(waters => {
           waters.forEach( water => {
-            const circleMarker = L.circle([water.lat, water.lon], {
-              color: 'red',
-              fillColor: 'red',
-              fillOpacity: 0.5,
-              radius: circleMarkerRadius
+            let divIcon =L.divIcon({
+              className:'water-marker-div-icon',
+              html:'<i class="fa fa-tint fa-2x"></i><span class="location-marker-text">' + water.name + '</span>',
+              iconAnchor:[14,14],
+              iconSize:null,
+              popupAnchor:[0,0]
+            });
+
+            L.marker([water.lat, water.lon], {
+              icon: divIcon
             }).addTo(this.map);
-            circleMarkers.push(circleMarker);
           });
-
-
-
-        })
-
-        const mockW = Mock.mockW();
-        mockW.forEach( water => {
-          const circleMarker = L.circle([water.lat, water.lon], {
-            color: 'blue',
-            fillColor: 'blue',
-            fillOpacity: 0.5,
-            radius: circleMarkerRadius
-          }).addTo(this.map);
-          circleMarkers.push(circleMarker);
         });
 
-        /* adjust circle marker radius depending on zoom level */
-        let myZoom = {
-          start:  this.map.getZoom(),
-          end: this.map.getZoom()
-        };
-        this.map.on('zoomstart', () => {
-          myZoom.start = this.map.getZoom();
-        });
-        this.map.on('zoomend', () => {
-          myZoom.end = this.map.getZoom();
-          const diff = myZoom.start - myZoom.end;
-          circleMarkers.forEach(circleMarker => {
-            if (diff > 0) {
-              circleMarker.setRadius(circleMarker.getRadius() * 2);
-            } else if (diff < 0) {
-              circleMarker.setRadius(circleMarker.getRadius() / 2);
-            }
-          })
+        API.getFacilities().then(d=>d.json()).then(facilities => {
+          facilities.forEach( facility => {
+            let divIcon =L.divIcon({
+              className:'facility-marker-div-icon',
+              //html:'<i class="fa fa-industry fa-2x"></i><span class="location-marker-text">' + facility.name + '</span>',
+              html:'<i class="fa fa-industry fa-2x"></i>',
+              iconAnchor:[14,14],
+              iconSize:null,
+              popupAnchor:[0,0]
+            });
+
+            L.marker([facility.lat, facility.lon], {
+              icon: divIcon,
+              opacity: 0.3,
+            }).addTo(this.map);
+          });
         });
       },
 
@@ -158,6 +133,29 @@
 
   height: 800px;
   width: 400px;
+}
+
+.water-marker-div-icon {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  color: blue;
+  white-space: nowrap;
+}
+
+.facility-marker-div-icon {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  color: brown;
+  white-space: nowrap;
+}
+
+.location-marker-text {
+  padding-left: 5px;
+  color: black;
+  font-size: 14px;
+  font-weight: 900;
 }
 
 </style>
