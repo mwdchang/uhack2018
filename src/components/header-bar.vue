@@ -1,9 +1,14 @@
 <template>
   <div>
     <h4>Where is the Water Quality Worst?</h4>
+
     <div>
-      <span>{{currentLocation}} - {{currentChemical}} - {{currentFacility}}</span>
-      <span @click="reset()"> **Back** </span>
+      <span>
+        <span v-if="currentLocation">{{currentLocation.name}}</span> - 
+        <span v-if="currentChemical">{{currentChemical}}</span> - 
+        <span v-if="currentFacility">{{currentFacility.name}}</span>
+      </span>
+      <button v-if="currentLocation" class="btn btn-primary btn-sm" @click="reset()">Back</button>
     </div>
   </div>
 </template>

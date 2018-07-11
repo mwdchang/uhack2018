@@ -15,7 +15,7 @@
     <div v-if="currentLocation">
       <div>Facility Measures</div>
       <div v-for="spark of facilityData" :key="spark.id">
-        <div>
+        <div @click="switchFacility(spark)">
           <spark-line :data="spark"/>
         </div>
       </div>
@@ -58,8 +58,12 @@ export default {
       setCurrentChemical: 'setCurrentChemical'
     }),
     switchLocation(spark) {
+      console.log('switching');
       this.setCurrentLocation(spark);
       this.setCurrentChemical(spark.chemical);
+    },
+    switchFacility(spark) {
+      this.setCurrentFacility(spark);
     }
   }
 }

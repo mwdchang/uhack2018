@@ -9,7 +9,6 @@
   import {  mapActions, mapGetters } from 'vuex';
   import Mock from '../util/mock.js';
 
-
   /* template */
   export default {
     name: 'map-panel',
@@ -29,7 +28,11 @@
     },
     watch: {
       currentLocation: function changed() {
-        this.locationChanged();
+        if (this.currentLocation !== null) {
+          this.locationChanged();
+        } else {
+          this.cluster.clearLayers();
+        }
       }
     },
     methods: {

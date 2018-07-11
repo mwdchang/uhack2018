@@ -5,6 +5,7 @@
       <side-panel/>
       <map-panel/>
     </div>
+    <facility-dialog/>
   </div>
 </template>
 
@@ -14,12 +15,13 @@ import {  mapActions, mapGetters } from 'vuex';
 import SidePanel from './side-panel.vue';
 import HeaderBar from './header-bar.vue';
 import MapPanel from './map-panel.vue';
+import FacilityDialog from './facility-dialog.vue';
 
 /* template */
 export default {
   name: 'home',
   components: {
-    SidePanel, HeaderBar, MapPanel
+    SidePanel, HeaderBar, MapPanel, FacilityDialog
   },
   data: () => ({
     label: 'hello world'
