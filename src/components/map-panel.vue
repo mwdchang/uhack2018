@@ -59,8 +59,8 @@
         const mockF = Mock.mockF();
         mockF.forEach( facility => {
           const circleMarker = L.circle([facility.lat, facility.lon], {
-            color: 'blue',
-            fillColor: 'blue',
+            color: 'red',
+            fillColor: 'red',
             fillOpacity: 0.5,
             radius: circleMarkerRadius
           }).addTo(this.map);
@@ -70,8 +70,8 @@
         const mockW = Mock.mockW();
         mockW.forEach( water => {
           const circleMarker = L.circle([water.lat, water.lon], {
-            color: 'red',
-            fillColor: 'red',
+            color: 'blue',
+            fillColor: 'blue',
             fillOpacity: 0.5,
             radius: circleMarkerRadius
           }).addTo(this.map);
