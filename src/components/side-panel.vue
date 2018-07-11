@@ -2,7 +2,7 @@
   <div class="side-panel">
     <!-- Show waters -->
     <div v-if="!currentLocation">
-      <div>Water Measures</div>
+      <div class="header"><i class="fa fa-tint"></i> Water Measures</div>
       <div v-for="(spark, idx) of waterData" :key="idx">
         <div @click="switchLocation(spark)">
           <spark-line :data="spark"/>
@@ -12,7 +12,7 @@
 
     <!-- Show facilities -->
     <div v-if="currentLocation">
-      <div>Facility Measures</div>
+      <div class="header"><i class="fa fa-industry"></i> Facility Measures</div>
       <div v-for="(spark, idx) of facilityData" :key="idx">
         <div @click="switchFacility(spark)">
           <spark-line :data="spark"/>
@@ -102,5 +102,11 @@ export default {
   border: 1px solid #ccc;
   max-height: 800px;
   overflow-y: scroll;
+}
+
+.header {
+  text-align: left;
+  font-size: 120%;
+  padding-left: 5px;
 }
 </style>

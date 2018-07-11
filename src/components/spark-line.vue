@@ -1,12 +1,10 @@
 <template>
   <div ref="container" class="spark-container">
-    <div>
-      <div class="chemical-label">{{data.chemical}}</div>
-      <svg class="chart"></svg>
-    </div>
-    <div class="name-label" style="display: flex; flex-direction:column">
-      <div>{{data.name}}</div>
-      <div class="name-label" :class="{'positive': data.delta > 0, 'negative': data.delta <=0 }">{{deltaStr}}</div>
+    <div v-if="summary === false" class="name-label">{{data.name}}</div>
+    <div v-if="summary === false" class="chemical-label">{{data.chemical}}</div>
+    <svg class="chart"></svg>
+    <div class="delta-label">
+      <div :class="{'positive': data.delta > 0, 'negative': data.delta <=0 }">{{deltaStr}}</div>
     </div>
 
   </div>
@@ -20,14 +18,18 @@ export default {
   props: {
     data: {
       type: Object,
+    },
+    summary: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
     deltaStr: ''
   }),
   mounted() {
-    const W = 200;
-    const H = 50;
+    const W = 80;
+    const H = 30;
     const chart = d3.select(this.$refs.container).select('.chart');
     chart.attr('width', W +'px');
     chart.attr('height', H +'px');
@@ -57,7 +59,7 @@ export default {
       .attr('width', W)
       .attr('height', 1)
       .style('stroke', 'none')
-      .style('fill', '#f80');
+      .style('fill', '#ccc');
 
 
     const type = this.data.type;
@@ -106,9 +108,18 @@ export default {
   font-size: 80%;
 }
 
-.name-label {
-  width: 120px;
+.delta-label {
+  text-align: left;
+  width: 50px;
   font-size: 80%;
+  padding-left: 10px;
+}
+
+
+.name-label {
+  width: 180px;
+  font-size: 80%;
+  text-align: left;
 }
 
 .positive {

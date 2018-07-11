@@ -24,7 +24,9 @@
       ...mapGetters({
         currentLocation: 'currentLocation',
         currentFacility: 'currentFacility',
-        currentChemical: 'currentChemical'
+        currentChemical: 'currentChemical',
+        waters: 'waters',
+        facilities: 'facilities',
       })
     },
     watch: {
@@ -117,28 +119,30 @@
 
       /* User click a water location spark line */
       locationChanged() {
+        const DIST = 30 * 1000; // 100 km
+
         this.cluster.clearLayers();
 
         const loc = this.currentLocation;
         const origin = new L.LatLng(loc.lat, loc.lon);
 
+        this.map.panTo(origin);
+
         // TODO: filtering by distance and checmical
-        const mockF = Mock.mockF();
-        mockF.forEach( facility => {
+        this.facilities.forEach( facility => {
           const fLoc = new L.LatLng(facility.lat, facility.lon);
-          const pointList = [origin, fLoc];
-
-          const line = new L.polyline(pointList, {
-            color: '#F80',
-            weight: Math.random()*15,
-            opacity: 0.5,
-            smoothFactor: 1
-          });
-          // firstpolyline.addTo(this.map);
-          this.cluster.addLayer(line);
-        });
+          if (fLoc.distanceTo(origin) < DIST) {
+            const pointList = [origin, fLoc];
+            const line = new L.polyline(pointList, {
+              color: '#F0F',
+              weight: 2,
+              opacity: 0.5,
+              smoothFactor: 1
+            });
+            this.cluster.addLayer(line);
+          }
+        })
         this.cluster.addTo(this.map);
-
       }
     }
   }
