@@ -18,6 +18,7 @@
       this.cluster = L.layerGroup();
 
       this.createMap();
+      this.addLocationMarkers();
     },
     computed: {
       ...mapGetters({
@@ -47,6 +48,31 @@
           }
         );
         this.tileLayer.addTo(this.map);
+      },
+
+      addLocationMarkers() {
+        const mockF = Mock.mockF();
+        mockF.forEach( facility => {
+          const circle = L.circle([facility.lat, facility.lon], {
+            color: 'blue',
+            fillColor: 'blue',
+            fillOpacity: 0.5,
+            radius: 500
+          });
+          this.cluster.addLayer(circle);
+        });
+
+        const mockW = Mock.mockW();
+        mockW.forEach( water => {
+          const circle = L.circle([water.lat, water.lon], {
+            color: 'red',
+            fillColor: 'red',
+            fillOpacity: 0.5,
+            radius: 500
+          });
+          this.cluster.addLayer(circle);
+        });
+        this.cluster.addTo(this.map);
       },
 
       /* User click a water location spark line */
@@ -86,7 +112,7 @@
   border: 1px solid #ccc;
   margin: 2px;
 
-  height: 400px;
+  height: 800px;
   width: 400px;
 }
 

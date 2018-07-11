@@ -1,4 +1,5 @@
 export default class {
+  // water test sites
   static mockW() {
     return [
       {
