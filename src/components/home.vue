@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import {  mapActions, mapGetters } from 'vuex';
 
 import SidePanel from './side-panel.vue';
 import HeaderBar from './header-bar.vue';
@@ -24,6 +25,12 @@ export default {
     label: 'hello world'
   }),
   mounted() {
+  },
+  computed: {
+    ...mapGetters({
+      currentLocation: 'currentLocation',
+      currentFacility: 'currentFacility'
+    })
   },
   watch: {
   },

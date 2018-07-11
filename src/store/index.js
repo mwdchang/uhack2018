@@ -19,7 +19,7 @@ export const storeConfig = {
       commit('setCurrentFacility', o);
     },
     setCurrentLocation({ commit }, o) {
-      commit('setCurrentLocatin', o);
+      commit('setCurrentLocation', o);
     },
   },
   mutations: {

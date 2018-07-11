@@ -2,21 +2,32 @@
   <div class="side-panel">
     <div>Side panel stub</div>
     <div>
-      <spark-line/>
-      <spark-line/>
-      <spark-line/>
+      <div @click="switchLocation()">
+        <spark-line/>
+      </div>
     </div>
   </div>
 </template>
 
 
 <script>
+import {  mapActions, mapGetters } from 'vuex';
+
 import SparkLine from './spark-line.vue';
 
 export default {
   name: 'side-panel',
   components: {
     SparkLine
+  },
+  methods: {
+    ...mapActions({
+      setCurrentLocation: 'setCurrentLocation',
+      setCurrentFacility: 'setCurrentFacility'
+    }),
+    switchLocation() {
+      this.setCurrentLocation('xyz');
+    }
   }
 }
 </script>
