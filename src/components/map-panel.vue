@@ -8,6 +8,7 @@
   import 'leaflet/dist/leaflet.css';
   import {  mapActions, mapGetters } from 'vuex';
   import Mock from '../util/mock.js';
+  import API from '../util/api.js';
 
   /* template */
   export default {
@@ -66,6 +67,21 @@
           }).addTo(this.map);
           circleMarkers.push(circleMarker);
         });
+
+        API.getWater().then(d=>d.json()).then(waters => {
+          waters.forEach( water => {
+            const circleMarker = L.circle([water.lat, water.lon], {
+              color: 'red',
+              fillColor: 'red',
+              fillOpacity: 0.5,
+              radius: circleMarkerRadius
+            }).addTo(this.map);
+            circleMarkers.push(circleMarker);
+          });
+
+
+
+        })
 
         const mockW = Mock.mockW();
         mockW.forEach( water => {
