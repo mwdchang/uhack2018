@@ -1,13 +1,33 @@
 <template>
-  <div class="map-panel">
-    <div>Map stub</div>
+  <div id="mapid" class="map-panel">
   </div>
 </template>
 
 <script>
-export default {
-  name: 'map-panel'
-}
+  import L from 'leaflet'
+  import 'leaflet/dist/leaflet.css'
+
+  /* template */
+  export default {
+    name: 'map-panel',
+
+    mounted() {
+      this.createMap();
+    },
+    methods: {
+      createMap() {
+        this.map = L.map('mapid').setView([43.6532, -79.3832], 12);
+        this.tileLayer = L.tileLayer(
+          'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
+          {
+              maxZoom: 18,
+              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>',
+          }
+        );
+        this.tileLayer.addTo(this.map);
+      }
+    }
+  }
 </script>
 
 <style>
@@ -21,4 +41,5 @@ export default {
   height: 400px;
   width: 400px;
 }
+
 </style>
