@@ -1,10 +1,14 @@
 <template>
   <div ref="container" class="spark-container">
-    <div class="chemical-label">{{data.chemical}}</div>
-    <svg class="chart"></svg>
-    <div class="name-label">{{data.name}}</div>
+    <div>
+      <div class="chemical-label">{{data.chemical}}</div>
+      <svg class="chart"></svg>
+    </div>
+    <div class="name-label" style="display: flex; flex-direction:column">
+      <div>{{data.name}}</div>
+      <div class="name-label" :class="{'positive': data.delta > 0, 'negative': data.delta <=0 }">{{deltaStr}}</div>
+    </div>
 
-    <div class="name-label" :class="{'positive': data.delta > 0, 'negative': data.delta <=0 }">{{data.delta}}</div>
   </div>
 </template>
 
@@ -18,16 +22,29 @@ export default {
       type: Object,
     }
   },
+  data: () => ({
+    deltaStr: ''
+  }),
   mounted() {
     const W = 200;
     const H = 50;
     const chart = d3.select(this.$refs.container).select('.chart');
     chart.attr('width', W +'px');
     chart.attr('height', H +'px');
-    const data = this.data.data;
 
-    const yScale = d3.scaleLinear().range([H, 0]).domain([0, 10]);
-    const xScale = d3.scaleLinear().range([0, W]).domain([0, 10]);
+    // FIXME
+    const data = this.data.data.map(d => {
+      return d < 0 ? 0 : d;
+    });
+
+    const ymax = d3.max(data);
+    const len = data.length-1;
+
+
+    this.deltaStr = this.data.delta.toFixed(2);
+
+    const yScale = d3.scaleLinear().range([H, 0]).domain([-1, ymax+1]);
+    const xScale = d3.scaleLinear().range([0, W]).domain([0, len]);
 
     const valueFn= d3.line()
       .x(function(d, i) { return xScale(i); })
@@ -65,9 +82,10 @@ export default {
 .spark-container {
   display: flex;
   flex-direction: row;
-  padding: 1px;
+  padding: 2px;
   border: 1px solid #ccc;
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 .line-facility {
@@ -83,7 +101,8 @@ export default {
 }
 
 .chemical-label {
-  width: 80px;
+  text-align: left;
+  width: 120px;
   font-size: 80%;
 }
 
