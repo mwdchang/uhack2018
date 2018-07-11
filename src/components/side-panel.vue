@@ -1,10 +1,25 @@
 <template>
   <div class="side-panel">
-    <div>Side panel stub</div>
-    <div v-for="spark of sparkData">
-      <div @click="switchLocation(spark)">
-        <spark-line :data="spark"/>
+
+    <!-- Show waters -->
+    <div v-if="!currentLocation">
+      <div>Water Measures</div>
+      <div v-for="spark of waterData" :key="spark.id">
+        <div @click="switchLocation(spark)">
+          <spark-line :data="spark"/>
+        </div>
       </div>
+    </div>
+
+    <!-- Show facilities -->
+    <div v-if="currentLocation">
+      <div>Facility Measures</div>
+      <div v-for="spark of facilityData" :key="spark.id">
+        <div>
+          <spark-line :data="spark"/>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -22,10 +37,19 @@ export default {
     SparkLine
   },
   data: () => ({
-    sparkData: []
+    waterData: [],
+    facilityData: []
   }),
   mounted() {
-    this.sparkData = Mock.mockdata();
+    this.waterData = Mock.mockW();
+    this.facilityData = Mock.mockF();
+  },
+  computed: {
+    ...mapGetters({
+      currentLocation: 'currentLocation',
+      currentFacility: 'currentFacility',
+      currentChemical: 'currentChemical'
+    })
   },
   methods: {
     ...mapActions({
@@ -44,7 +68,7 @@ export default {
 <style>
 .side-panel {
   box-sizing: border-box;
-  width: 250px;
+  width: 300px;
   height: 100%;
   margin: 2px;
 

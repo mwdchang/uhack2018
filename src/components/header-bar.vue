@@ -1,7 +1,10 @@
 <template>
   <div>
     <h4>Where is the Water Quality Worst?</h4>
-    <div>{{currentLocation}} - {{currentChemical}} - {{currentFacility}}</div>
+    <div>
+      <span>{{currentLocation}} - {{currentChemical}} - {{currentFacility}}</span>
+      <span @click="reset()"> **Back** </span>
+    </div>
   </div>
 </template>
 
@@ -17,6 +20,19 @@ export default {
       currentChemical: 'currentChemical'
     })
   },
+  methods: {
+    ...mapActions({
+      setCurrentLocation: 'setCurrentLocation',
+      setCurrentFacility: 'setCurrentFacility',
+      setCurrentChemical: 'setCurrentChemical'
+    }),
+
+    reset() {
+      this.setCurrentChemical(null);
+      this.setCurrentFacility(null);
+      this.setCurrentLocation(null);
+    }
+  }
 }
 </script>
 

@@ -1,8 +1,8 @@
 <template>
   <div ref="container" class="spark-container">
-    <div>{{data.chemical}}</div>
+    <div class="chemical-label">{{data.chemical}}</div>
     <svg class="chart"></svg>
-    <div>{{data.name}}</div>
+    <div class="name-label">{{data.name}}</div>
   </div>
 </template>
 
@@ -31,10 +31,19 @@ export default {
       .x(function(d, i) { return xScale(i); })
       .y(function(d) { return yScale(d); });
 
-    chart.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", valueFn);
+
+    const type = this.data.type;
+    if (type === 'water') {
+      chart.append("path")
+        .data([data])
+        .attr("class", "line-water")
+        .attr("d", valueFn);
+    } else {
+      chart.append("path")
+        .data([data])
+        .attr("class", "line-facility")
+        .attr("d", valueFn);
+    }
 
   }
 
@@ -47,9 +56,23 @@ export default {
   flex-direction: row;
 }
 
-.line {
+.line-facility {
+  fill: none;
+  stroke: red;
+  stroke-width: 2px;
+}
+
+.line-water {
   fill: none;
   stroke: steelblue;
   stroke-width: 2px;
+}
+
+.chemical-label {
+  width: 80px;
+}
+
+.name-label {
+  width: 120px;
 }
 </style>

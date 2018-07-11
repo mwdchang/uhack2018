@@ -8,7 +8,7 @@ export const storeConfig = {
     currentScenario: null,
     currentLocation: null,
     currentFacility: null,
-    currentChemical: 'lead'
+    currentChemical: null
   },
   getters: {
     currentLocation: state => state.currentLocation,
