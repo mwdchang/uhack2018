@@ -1,7 +1,7 @@
 <template>
   <div>
     <h4>Where is the Water Quality Worst?</h4>
-    <div>{{currentLocation}} - {{currentFacility}}</div>
+    <div>{{currentLocation}} - {{currentChemical}} - {{currentFacility}}</div>
   </div>
 </template>
 
@@ -13,7 +13,8 @@ export default {
   computed: {
     ...mapGetters({
       currentLocation: 'currentLocation',
-      currentFacility: 'currentFacility'
+      currentFacility: 'currentFacility',
+      currentChemical: 'currentChemical'
     })
   },
 }

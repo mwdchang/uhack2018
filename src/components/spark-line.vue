@@ -1,7 +1,8 @@
 <template>
   <div ref="container" class="spark-container">
-    <div>Name</div>
+    <div>{{data.chemical}}</div>
     <svg class="chart"></svg>
+    <div>{{data.name}}</div>
   </div>
 </template>
 
@@ -21,7 +22,7 @@ export default {
     const chart = d3.select(this.$refs.container).select('.chart');
     chart.attr('width', W +'px');
     chart.attr('height', H +'px');
-    const data = [1, 3, 5, 7, 3, 2, 5, 6, 8, 8];
+    const data = this.data.data;
 
     const yScale = d3.scaleLinear().range([H, 0]).domain([0, 10]);
     const xScale = d3.scaleLinear().range([W, 0]).domain([0, 10]);
