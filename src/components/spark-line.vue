@@ -1,6 +1,6 @@
 <template>
-  <div ref="container">
-    <div>Spark</div>
+  <div ref="container" class="spark-container">
+    <div>Name</div>
     <svg class="chart"></svg>
   </div>
 </template>
@@ -41,6 +41,11 @@ export default {
 </script>
 
 <style>
+.spark-container {
+  display: flex;
+  flex-direction: row;
+}
+
 .line {
   fill: none;
   stroke: steelblue;
