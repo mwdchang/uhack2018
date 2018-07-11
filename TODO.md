@@ -1,16 +1,22 @@
 ## General
-- facilitiies info window - DANIEL
--- pagination through facilities - DANIEL
+- Facilitiies info window - DANIEL
+- Pagination through facilities - DANIEL
 
 ## Parsing
-- faciities paring  - JAMES
+- Faciities parsing  - JAMES
+- Facility meta data (for general information)
 
 ## Map
-- fonts along with labels (facilities and water) - MARK
-- try correlation (opacity PCC) on the links - DANIEL
-- thickness map to last year amount - DANIEL
-- after a water location is selected, remove all but that location on the map to avoid clutter.
+- Fonts along with labels (facilities and water) - MARK
+- After a water location is selected, remove all but that location on the map to avoid clutter.
 
-## Header stuff 
+
+## Map links
+- Try correlation (opacity PCC) on the links - DANIEL
+- Thickness map to last year amount - DANIEL
+- Blur lines to show uncertainty (correlation)
+
+
+## Header stuff (overall option)
 - most decrease option
 - worst option
