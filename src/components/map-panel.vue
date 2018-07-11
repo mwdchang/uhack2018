@@ -51,28 +51,52 @@
       },
 
       addLocationMarkers() {
+        const circleMarkerRadius = 3000;
+        let circleMarkers = [];
         const mockF = Mock.mockF();
         mockF.forEach( facility => {
-          const circle = L.circle([facility.lat, facility.lon], {
+          const circleMarker = L.circle([facility.lat, facility.lon], {
             color: 'blue',
             fillColor: 'blue',
             fillOpacity: 0.5,
-            radius: 500
+            radius: circleMarkerRadius
           });
-          this.cluster.addLayer(circle);
+          circleMarkers.push(circleMarker);
+          this.cluster.addLayer(circleMarker);
         });
 
         const mockW = Mock.mockW();
         mockW.forEach( water => {
-          const circle = L.circle([water.lat, water.lon], {
+          const circleMarker = L.circle([water.lat, water.lon], {
             color: 'red',
             fillColor: 'red',
             fillOpacity: 0.5,
-            radius: 500
+            radius: circleMarkerRadius
           });
-          this.cluster.addLayer(circle);
+          circleMarkers.push(circleMarker);
+          this.cluster.addLayer(circleMarker);
         });
         this.cluster.addTo(this.map);
+
+        /* adjust circle marker radius depending on zoom level */
+        let myZoom = {
+          start:  this.map.getZoom(),
+          end: this.map.getZoom()
+        };
+        this.map.on('zoomstart', () => {
+          myZoom.start = this.map.getZoom();
+        });
+        this.map.on('zoomend', () => {
+          myZoom.end = this.map.getZoom();
+          const diff = myZoom.start - myZoom.end;
+          circleMarkers.forEach(circleMarker => {
+            if (diff > 0) {
+              circleMarker.setRadius(circleMarker.getRadius() * 2);
+            } else if (diff < 0) {
+              circleMarker.setRadius(circleMarker.getRadius() / 2);
+            }
+          })
+        });
       },
 
       /* User click a water location spark line */
