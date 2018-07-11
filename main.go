@@ -5,19 +5,13 @@ import "github.com/gin-contrib/cors"
 
 // MeasuredLocation is a measurment location with associated measurements
 type MeasuredLocation struct {
-	Lat  float64 `json:"lat"`
-	Lon  float64 `json:"lon"`
-	ID   string  `json:"id"`
-	Name string  `json:"name"`
-	Data Data    `json:"data"`
-	Type string  `json:"type"`
-}
-
-// Data represents measurement data for a
-type Data struct {
-	Lead     []float64 `json:"lead"`
-	Arsenic  []float64 `json:"arsenic"`
-	Chromium []float64 `json:"chromium"`
+	Lat      float64   `json:"lat"`
+	Lon      float64   `json:"lon"`
+	ID       string    `json:"id"`
+	Name     string    `json:"name"`
+	Data     []float64 `json:"data"`
+	Type     string    `json:"type"`
+	Chemical string    `json:"chemical"`
 }
 
 func main() {

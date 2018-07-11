@@ -43,9 +43,8 @@ func TestSites() []MeasuredLocation {
 	lines := strings.Split(string(dat), "\n")[1:]
 	for _, line := range lines {
 		fields := strings.Split(line, ",")
-		lon, _ := strconv.ParseFloat(strings.TrimSpace(fields[3]), 64)
-		lat, _ := strconv.ParseFloat(strings.TrimSpace(fields[4]), 64)
-
+		lat, _ := strconv.ParseFloat(strings.TrimSpace(fields[3]), 64)
+		lon, _ := strconv.ParseFloat(strings.TrimSpace(fields[4]), 64)
 		mls = append(mls, MeasuredLocation{
 			Lat:  lat,
 			Lon:  lon,
@@ -56,11 +55,40 @@ func TestSites() []MeasuredLocation {
 	}
 
 	tests := getTests()
-	combineTests(tests[0:1])
+	results := combineTests(tests)
+	// results is a list of:
+	// Station, Param, Results
 
-	//fmt.Print(results)
+	var theResults []MeasuredLocation
+	for _, result := range results {
+		var theLocation *MeasuredLocation
+		for i := range mls {
+			if mls[i].ID == result.Station {
+				theLocation = &mls[i]
+				break
+			}
+		}
 
-	return mls
+		if theLocation == nil {
+			continue
+		}
+
+		ml := MeasuredLocation{
+			ID:       result.Station,
+			Chemical: result.Param,
+			Data:     result.Results,
+			Lat:      theLocation.Lat,
+			Lon:      theLocation.Lon,
+			Name:     theLocation.Name,
+			Type:     theLocation.Type,
+		}
+
+		theResults = append(theResults, ml)
+	}
+
+	// fmt.Print(theResults)
+
+	return theResults
 }
 
 // Test represents a single test for a given station
@@ -88,12 +116,11 @@ func getTests() []Test {
 	lines := strings.Split(string(dat), "\n")[1:]
 	for _, line := range lines {
 		fields := strings.Split(line, ",")
-		result, _ := strconv.ParseFloat(fields[2], 64)
-		year, _ := strconv.ParseInt(fields[3], 10, 64)
-		fmt.Printf("James getTests field is %s year is %d\n", fields[3], year)
+		result, _ := strconv.ParseFloat(strings.TrimSpace(fields[2]), 64)
+		year, _ := strconv.ParseInt(strings.TrimSpace(fields[3]), 10, 64)
 		test := Test{
-			Station: fields[0],
-			Param:   fields[1],
+			Station: strings.TrimSpace(fields[0]),
+			Param:   strings.TrimSpace(fields[1]),
 			Result:  result,
 			Year:    int(year),
 		}
@@ -109,53 +136,63 @@ func combineTests(tests []Test) []TestResults {
 	//      station    param      year
 	tmp := make(map[string]map[string]map[int][]float64)
 	for _, test := range tests {
+		// fmt.Printf("%+v\n", test)
 		_, ok := tmp[test.Station]
 		// make a station if it's not available
 		if !ok {
+			// fmt.Println("wasn't a station")
 			tmp[test.Station] = make(map[string]map[int][]float64)
 		}
-		s, _ := tmp[test.Station]
 
 		// make a param if it's not available
 		key := getKey(test.Param)
-		_, ok = s[key]
+		// fmt.Printf("key is %s\n", key)
+		_, ok = tmp[test.Station][key]
 		if !ok {
-			s[key] = make(map[int][]float64)
+			// fmt.Println("wasn't a param")
+			tmp[test.Station][key] = make(map[int][]float64)
 		}
-		p, _ := s[key]
 
-		_, ok = p[test.Year]
+		// fmt.Println(test.Year)
+		_, ok = tmp[test.Station][key][test.Year]
 		if !ok {
-			p[test.Year] = []float64{test.Result}
+			tmp[test.Station][key][test.Year] = []float64{test.Result}
 		} else {
-			p[test.Year] = append(p[test.Year], test.Result)
+			tmp[test.Station][key][test.Year] = append(tmp[test.Station][key][test.Year], test.Result)
 		}
-
 	}
+
+	//fmt.Printf("%+v\n", tmp)
 
 	var testResults []TestResults
 	for st, t := range tmp { // t -> station
-		result := TestResults{
-			Station: st,
-		}
 
-		for _, p := range t { // p -> param
+		for pa, p := range t { // p -> param
+			// fmt.Println("Param is %s\n", pa)
+			result := TestResults{
+				Station: st,
+				Param:   pa,
+			}
 			for i := 2000; i <= 2016; i++ {
 				vals, ok := p[i]
 				if !ok { // no samples for that year
 					result.Results = append(result.Results, 0)
+				} else {
+					cnt := float64(len(vals))
+					tot := 0.0
+					for _, v := range vals {
+						tot += v
+					}
+					result.Results = append(result.Results, tot/cnt)
 				}
-				cnt := float64(len(vals))
-				tot := 0.0
-				for _, v := range vals {
-					tot += v
-				}
-				result.Results = append(result.Results, tot/cnt)
+
 			}
+			testResults = append(testResults, result)
 		}
 
-		testResults = append(testResults, result)
 	}
+
+	// fmt.Printf("%+v\n", testResults)
 
 	return testResults
 }
