@@ -23,7 +23,7 @@ func main() {
 	r := gin.Default()
 	r.GET("/facilities", facilitiesHandler)
 	r.GET("/water", waterHandler)
-	r.Run()
+	r.Run(":3333")
 
 }
 
