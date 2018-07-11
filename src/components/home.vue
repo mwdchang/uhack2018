@@ -3,6 +3,7 @@
     <header-bar/>
     <div class="container">
       <side-panel/>
+      <map-panel/>
     </div>
   </div>
 </template>
@@ -11,12 +12,13 @@
 
 import SidePanel from './side-panel.vue';
 import HeaderBar from './header-bar.vue';
+import MapPanel from './map-panel.vue';
 
 /* template */
 export default {
   name: 'home',
   components: {
-    SidePanel, HeaderBar
+    SidePanel, HeaderBar, MapPanel
   },
   data: () => ({
     label: 'hello world'

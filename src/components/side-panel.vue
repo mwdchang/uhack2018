@@ -18,7 +18,11 @@ export default {
 
 <style>
 .side-panel {
+  box-sizing: border-box;
   width: 250px;
   height: 100%;
+  margin: 2px;
+
+  border: 1px solid #ccc;
 }
 </style>
