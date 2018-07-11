@@ -1,6 +1,5 @@
 <template>
   <div class="side-panel">
-
     <!-- Show waters -->
     <div v-if="!currentLocation">
       <div>Water Measures</div>
@@ -30,6 +29,7 @@ import {  mapActions, mapGetters } from 'vuex';
 
 import SparkLine from './spark-line.vue';
 import Mock from '../util/mock.js';
+import API from '../util/api.js';
 
 export default {
   name: 'side-panel',
@@ -41,8 +41,35 @@ export default {
     facilityData: []
   }),
   mounted() {
-    this.waterData = Mock.mockW();
-    this.facilityData = Mock.mockF();
+    API.getWater().then(d=>d.json()).then( waters => {
+      // TODO: FAKE
+      waters.forEach (w => {
+        w.data = [];
+        for (let i=0; i < 10; i++) {
+          w.data.push( Math.random() * 10);
+        }
+        const lastIdx = w.data.length - 1;
+        const delta = w.data[lastIdx] - w.data[0];
+        w.delta = delta.toFixed(2);
+
+       });
+      this.waterData = waters;
+    });
+
+    API.getFacilities().then(d=>d.json()).then( facilities => {
+      // TODO: FAKE
+      facilities.forEach (f => {
+        f.data = [];
+        for (let i=0; i < 10; i++) {
+          f.data.push( Math.random() * 10);
+        }
+        const lastIdx = f.data.length - 1;
+        const delta = f.data[lastIdx] - f.data[0];
+        f.delta = delta.toFixed(2);
+
+      });
+      this.facilityData = facilities;
+    });
   },
   computed: {
     ...mapGetters({
@@ -58,7 +85,6 @@ export default {
       setCurrentChemical: 'setCurrentChemical'
     }),
     switchLocation(spark) {
-      console.log('switching');
       this.setCurrentLocation(spark);
       this.setCurrentChemical(spark.chemical);
     },
@@ -72,10 +98,12 @@ export default {
 <style>
 .side-panel {
   box-sizing: border-box;
-  width: 300px;
+  width: 350px;
   height: 100%;
   margin: 2px;
 
   border: 1px solid #ccc;
+  max-height: 800px;
+  overflow-y: scroll;
 }
 </style>
