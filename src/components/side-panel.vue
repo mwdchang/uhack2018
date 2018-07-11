@@ -58,7 +58,7 @@ export default {
       setCurrentChemical: 'setCurrentChemical'
     }),
     switchLocation(spark) {
-      this.setCurrentLocation(spark.name);
+      this.setCurrentLocation(spark);
       this.setCurrentChemical(spark.chemical);
     }
   }

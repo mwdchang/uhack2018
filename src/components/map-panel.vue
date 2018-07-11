@@ -7,6 +7,7 @@
   import L from 'leaflet';
   import 'leaflet/dist/leaflet.css';
   import {  mapActions, mapGetters } from 'vuex';
+  import Mock from '../util/mock.js';
 
 
   /* template */
@@ -14,6 +15,8 @@
     name: 'map-panel',
 
     mounted() {
+      this.cluster = L.layerGroup();
+
       this.createMap();
     },
     computed: {
@@ -25,7 +28,7 @@
     },
     watch: {
       currentLocation: function changed() {
-        console.log('location', this.currentLocation);
+        this.locationChanged();
       }
     },
     methods: {
@@ -35,7 +38,7 @@
         setCurrentChemical: 'setCurrentChemical'
       }),
       createMap() {
-        this.map = L.map('mapid').setView([43.6532, -79.3832], 12);
+        this.map = L.map('mapid').setView([43.6532, -79.3832], 8);
         this.tileLayer = L.tileLayer(
           'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
           {
@@ -44,6 +47,32 @@
           }
         );
         this.tileLayer.addTo(this.map);
+      },
+
+      /* User click a water location spark line */
+      locationChanged() {
+        this.cluster.clearLayers();
+
+        const loc = this.currentLocation;
+        const origin = new L.LatLng(loc.lat, loc.lon);
+
+        // TODO: filtering by distance and checmical
+        const mockF = Mock.mockF();
+        mockF.forEach( facility => {
+          const fLoc = new L.LatLng(facility.lat, facility.lon);
+          const pointList = [origin, fLoc];
+
+          const line = new L.polyline(pointList, {
+            color: '#F80',
+            weight: Math.random()*15,
+            opacity: 0.5,
+            smoothFactor: 1
+          });
+          // firstpolyline.addTo(this.map);
+          this.cluster.addLayer(line);
+        });
+        this.cluster.addTo(this.map);
+
       }
     }
   }

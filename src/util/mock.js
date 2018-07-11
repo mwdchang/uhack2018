@@ -28,8 +28,8 @@ export default class {
   static mockF() {
     return [
       {
-        'lat': 43.69,
-        'lon': -79.59,
+        'lat': 44.09,
+        'lon': -80.59,
         'id': 3,
         'name': 'One',
         'data': [2, 8, 9, 4, 5, 6, 7, 8, 2, 9],
@@ -37,8 +37,8 @@ export default class {
         'chemical': 'lead'
       },
       {
-        'lat': 43.69,
-        'lon': -79.59,
+        'lat': 44.12,
+        'lon': -78.59,
         'id': 4,
         'name': 'Two',
         'data': [3, 3, 8, 4, 5, 6, 5, 3, 3, 2],
