@@ -25,11 +25,8 @@
 
 
 <script>
-import _ from 'lodash';
 import {  mapActions, mapGetters } from 'vuex';
-
 import SparkLine from './spark-line.vue';
-import API from '../util/api.js';
 
 export default {
   name: 'side-panel',
@@ -37,32 +34,6 @@ export default {
     SparkLine
   },
   mounted() {
-    API.getWater().then(d=>d.json()).then( waters => {
-      waters.forEach (w => {
-        const lastIdx = (w.data.length - 1);
-        const delta = w.data[lastIdx] - w.data[0];
-        w.delta = delta;
-      });
-      this.setWaters(_.sortBy(waters, (d) => -d.delta));
-      console.log('waters ready');
-    });
-
-    API.getFacilities().then(d=>d.json()).then( facilities => {
-      // TODO: FAKE
-      facilities.forEach (f => {
-        f.data = [];
-        for (let i=0; i < 10; i++) {
-          f.data.push( Math.random() * 10);
-        }
-        const lastIdx = f.data.length - 1;
-        const delta = f.data[lastIdx] - f.data[0];
-        f.delta = delta;
-      });
-
-      this.setFacilities( _.sortBy(facilities, (d) => -d.delta));
-      console.log('facilities ready');
-    });
-
   },
   computed: {
     ...mapGetters({
@@ -78,8 +49,6 @@ export default {
       setCurrentLocation: 'setCurrentLocation',
       setCurrentFacility: 'setCurrentFacility',
       setCurrentChemical: 'setCurrentChemical',
-      setWaters: 'setWaters',
-      setFacilities: 'setFacilities'
     }),
     switchLocation(spark) {
       this.setCurrentLocation(spark);

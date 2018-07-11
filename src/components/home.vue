@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="waterData && facilityData">
     <header-bar/>
     <div class="container">
       <side-panel/>
@@ -10,12 +10,15 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import {  mapActions, mapGetters } from 'vuex';
 
 import SidePanel from './side-panel.vue';
 import HeaderBar from './header-bar.vue';
 import MapPanel from './map-panel.vue';
 import FacilityDialog from './facility-dialog.vue';
+ 
+import API from '../util/api.js';
 
 
 /* template */
@@ -25,20 +28,45 @@ export default {
     SidePanel, HeaderBar, MapPanel, FacilityDialog
   },
   mounted() {
+    API.getWater().then(d=>d.json()).then( waters => {
+      waters.forEach (w => {
+        const lastIdx = (w.data.length - 1);
+        const delta = w.data[lastIdx] - w.data[0];
+        w.delta = delta;
+      });
+      this.setWaters(_.sortBy(waters, (d) => -d.delta));
+    });
 
+    API.getFacilities().then(d=>d.json()).then( facilities => {
+      // TODO: FAKE
+      facilities.forEach (f => {
+        f.data = [];
+        for (let i=0; i < 10; i++) {
+          f.data.push( Math.random() * 10);
+        }
+        const lastIdx = f.data.length - 1;
+        const delta = f.data[lastIdx] - f.data[0];
+        f.delta = delta;
+      });
+      this.setFacilities( _.sortBy(facilities, (d) => -d.delta));
+    });
 
   },
   computed: {
     ...mapGetters({
       currentLocation: 'currentLocation',
-      currentFacility: 'currentFacility'
+      currentFacility: 'currentFacility',
+      waterData: 'waters',
+      facilityData: 'facilities'
     })
   },
-  method: {
+  methods: {
     ...mapActions({
       setCurrentLocation: 'setCurrentLocation',
       setCurrentFacility: 'setCurrentFacility',
-      setCurrentChemical: 'setCurrentChemical'
+      setCurrentChemical: 'setCurrentChemical',
+      setWaters: 'setWaters',
+      setFacilities: 'setFacilities'
     })
 
   }
