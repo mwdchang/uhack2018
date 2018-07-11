@@ -19,7 +19,7 @@ func main() {
 
 	// set up CORS
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:8081"}
+	config.AllowOrigins = []string{"http://localhost:8080", "http://localhost:8081"}
 	r.Use(cors.New(config))
 
 	r.GET("/facilities", facilitiesHandler)
