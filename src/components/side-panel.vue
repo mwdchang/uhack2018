@@ -1,18 +1,23 @@
 <template>
   <div class="side-panel">
     <div>Side panel stub</div>
-    <ul>
-      <li> item 1</li>
-      <li> item 2</li>
-      <li> item 3</li>
-      <li> item 4</li>
-    </ul>
+    <div>
+      <spark-line/>
+      <spark-line/>
+      <spark-line/>
+    </div>
   </div>
 </template>
 
+
 <script>
+import SparkLine from './spark-line.vue';
+
 export default {
-  name: 'side-panel'
+  name: 'side-panel',
+  components: {
+    SparkLine
+  }
 }
 </script>
 
