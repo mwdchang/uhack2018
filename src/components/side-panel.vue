@@ -36,10 +36,6 @@ export default {
   components: {
     SparkLine
   },
-  data: () => ({
-    waterData: [],
-    facilityData: []
-  }),
   mounted() {
     API.getWater().then(d=>d.json()).then( waters => {
       waters.forEach (w => {
@@ -47,8 +43,8 @@ export default {
         const delta = w.data[lastIdx] - w.data[0];
         w.delta = delta;
       });
-
-      this.waterData = _.sortBy(waters, (d) => -d.delta);
+      this.setWaters(_.sortBy(waters, (d) => -d.delta));
+      console.log('waters ready');
     });
 
     API.getFacilities().then(d=>d.json()).then( facilities => {
@@ -63,21 +59,27 @@ export default {
         f.delta = delta;
       });
 
-      this.facilityData = _.sortBy(facilities, (d) => -d.delta);
+      this.setFacilities( _.sortBy(facilities, (d) => -d.delta));
+      console.log('facilities ready');
     });
+
   },
   computed: {
     ...mapGetters({
       currentLocation: 'currentLocation',
       currentFacility: 'currentFacility',
-      currentChemical: 'currentChemical'
+      currentChemical: 'currentChemical',
+      waterData: 'waters',
+      facilityData: 'facilities'
     })
   },
   methods: {
     ...mapActions({
       setCurrentLocation: 'setCurrentLocation',
       setCurrentFacility: 'setCurrentFacility',
-      setCurrentChemical: 'setCurrentChemical'
+      setCurrentChemical: 'setCurrentChemical',
+      setWaters: 'setWaters',
+      setFacilities: 'setFacilities'
     }),
     switchLocation(spark) {
       this.setCurrentLocation(spark);

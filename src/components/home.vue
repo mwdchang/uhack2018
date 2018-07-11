@@ -24,10 +24,9 @@ export default {
   components: {
     SidePanel, HeaderBar, MapPanel, FacilityDialog
   },
-  data: () => ({
-    label: 'hello world'
-  }),
   mounted() {
+
+
   },
   computed: {
     ...mapGetters({
@@ -35,9 +34,13 @@ export default {
       currentFacility: 'currentFacility'
     })
   },
-  watch: {
-  },
   method: {
+    ...mapActions({
+      setCurrentLocation: 'setCurrentLocation',
+      setCurrentFacility: 'setCurrentFacility',
+      setCurrentChemical: 'setCurrentChemical'
+    })
+
   }
 }
 </script>
