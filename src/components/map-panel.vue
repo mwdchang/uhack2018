@@ -28,7 +28,11 @@
     },
     watch: {
       currentLocation: function changed() {
-        this.locationChanged();
+        if (this.currentLocation !== null) {
+          this.locationChanged();
+        } else {
+          this.cluster.clearLayers();
+        }
       }
     },
     methods: {
