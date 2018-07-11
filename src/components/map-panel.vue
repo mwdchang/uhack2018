@@ -58,8 +58,8 @@
         API.getWater().then(d=>d.json()).then(waters => {
           waters.forEach( water => {
             let divIcon =L.divIcon({
-              className:'facility-marker-div-icon',
-              html:'<i class="fa fa-map-marker fa-2x"></i><span class="location-marker-text">' + water.name + '</span>',
+              className:'water-marker-div-icon',
+              html:'<i class="fa fa-tint fa-2x"></i><span class="location-marker-text">' + water.name + '</span>',
               iconAnchor:[14,14],
               iconSize:null,
               popupAnchor:[0,0]
@@ -67,6 +67,24 @@
 
             L.marker([water.lat, water.lon], {
               icon: divIcon
+            }).addTo(this.map);
+          });
+        });
+
+        API.getFacilities().then(d=>d.json()).then(facilities => {
+          facilities.forEach( facility => {
+            let divIcon =L.divIcon({
+              className:'facility-marker-div-icon',
+              //html:'<i class="fa fa-industry fa-2x"></i><span class="location-marker-text">' + facility.name + '</span>',
+              html:'<i class="fa fa-industry fa-2x"></i>',
+              iconAnchor:[14,14],
+              iconSize:null,
+              popupAnchor:[0,0]
+            });
+
+            L.marker([facility.lat, facility.lon], {
+              icon: divIcon,
+              opacity: 0.3,
             }).addTo(this.map);
           });
         });
@@ -125,13 +143,15 @@
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  color: red;
+  color: brown;
   white-space: nowrap;
 }
 
 .location-marker-text {
   padding-left: 5px;
   color: black;
+  font-size: 14px;
+  font-weight: 900;
 }
 
 </style>
