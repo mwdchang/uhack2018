@@ -8,6 +8,7 @@
   import 'leaflet/dist/leaflet.css';
   import {  mapActions, mapGetters } from 'vuex';
   import Mock from '../util/mock.js';
+  import API from '../util/api.js';
 
 
   /* template */
@@ -19,6 +20,10 @@
 
       this.createMap();
       this.addLocationMarkers();
+
+      API.getWater().then(d => d.json()).then( data => {
+        console.log(data);
+      });
     },
     computed: {
       ...mapGetters({
