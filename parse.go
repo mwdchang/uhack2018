@@ -29,6 +29,11 @@ func Pollutants() []MeasuredLocation {
 			Type: "facility",
 		})
 	}
+
+	// TEST
+	pollutants := getPollutants()
+	fmt.Print(pollutants)
+
 	return mls
 }
 
@@ -91,6 +96,7 @@ func TestSites() []MeasuredLocation {
 	return theResults
 }
 
+// WATER
 // Test represents a single test for a given station
 type Test struct {
 	Station string
@@ -104,6 +110,24 @@ type TestResults struct {
 	Station string
 	Param   string
 	Results []float64 // one per year
+}
+
+// POLLUTION
+// Disposal represents a single disposal for a given facility
+// Same as Test but with appropriate business names
+type Disposal struct {
+	Year     int
+	ID       string
+	Quantity float64
+	Material string
+}
+
+// DisposalResult represents all the disposal values for a given station
+// Similar to TestResults but with appropriate business names
+type DisposalResults struct {
+	ID         string
+	Material   string
+	Quantities []float64
 }
 
 func getTests() []Test {
@@ -210,4 +234,34 @@ func getKey(code string) string {
 	}
 
 	panic(fmt.Sprintf("Unknown code %s\n", code))
+}
+
+func getPollutants() []Disposal {
+	dat, err := ioutil.ReadFile("./data/disposal-on-on-site.csv")
+	if err != nil {
+		panic(err)
+	}
+
+	var disposals []Disposal
+	lines := strings.Split(string(dat), "\n")[1:]
+	for _, line := range lines {
+		fields := strings.Split(line, ",")
+
+		year, _ := strconv.ParseInt(strings.TrimSpace(fields[0]), 10, 64)
+		quantity, _ := strconv.ParseFloat(strings.TrimSpace(fields[3]), 64)
+
+		disposal := Disposal{
+			Year:     int(year),
+			ID:       strings.TrimSpace(fields[1]),
+			Quantity: quantity,
+			Material: strings.TrimSpace(fields[4]),
+		}
+
+		fmt.Print(disposal)
+
+		disposals = append(disposals, disposal)
+	}
+
+	fmt.Printf("length of disposals: %d\n", len(disposals))
+	return disposals
 }
