@@ -63,9 +63,8 @@
             fillColor: 'blue',
             fillOpacity: 0.5,
             radius: circleMarkerRadius
-          });
+          }).addTo(this.map);
           circleMarkers.push(circleMarker);
-          this.cluster.addLayer(circleMarker);
         });
 
         const mockW = Mock.mockW();
@@ -75,11 +74,9 @@
             fillColor: 'red',
             fillOpacity: 0.5,
             radius: circleMarkerRadius
-          });
+          }).addTo(this.map);
           circleMarkers.push(circleMarker);
-          this.cluster.addLayer(circleMarker);
         });
-        this.cluster.addTo(this.map);
 
         /* adjust circle marker radius depending on zoom level */
         let myZoom = {
