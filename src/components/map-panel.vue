@@ -5,10 +5,10 @@
 
 <script>
   import L from 'leaflet';
+  import _ from 'lodash';
+  import * as d3 from 'd3';
   import 'leaflet/dist/leaflet.css';
   import {  mapActions, mapGetters } from 'vuex';
-  import Mock from '../util/mock.js';
-  import API from '../util/api.js';
 
   /* template */
   export default {
@@ -82,14 +82,21 @@
         const loc = this.currentLocation;
         const origin = new L.LatLng(loc.lat, loc.lon);
 
+
         this.map.setView(origin, 11);  // zoom of 11 gives us about 30 km radius
+        const max = d3.max(this.filterdFacilities.map( f => _.last(f.data)));
+
+        // TODO
+        const weightFn = (f) => {
+          return 1 + Math.log2(_.last(f.data));
+        }
 
         this.filterdFacilities.forEach( facility => {
           const fLoc = new L.LatLng(facility.lat, facility.lon);
           const pointList = [origin, fLoc];
           const line = new L.polyline(pointList, {
             color: '#F0F',
-            weight: 2,
+            weight: weightFn(facility),
             opacity: 0.5,
             smoothFactor: 1
           });
