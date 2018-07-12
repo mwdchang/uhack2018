@@ -80,7 +80,7 @@ export default {
 <style>
 .side-panel {
   box-sizing: border-box;
-  width: 400px;
+  width: 420px;
   height: 100%;
   margin: 2px;
 

@@ -119,7 +119,7 @@
           const fLoc = new L.LatLng(facility.lat, facility.lon);
           const pointList = [origin, fLoc];
           const line = new L.polyline(pointList, {
-            color: '#F0F',
+            color: '#555',
             weight: weightFn(facility),
             opacity: 0.5,
             smoothFactor: 1
@@ -129,7 +129,7 @@
           let divIcon =L.divIcon({
             className:'facility-marker-div-icon',
             //html:'<i class="fa fa-industry fa-2x"></i><span class="location-marker-text">' + facility.name + '</span>',
-            html:'<i class="fa fa-industry fa-2x"></i>',
+            html:'<i class="fa fa-industry fa-2x"><span class="location-marker-text">' + facility.name + '</span></i>',
             iconAnchor:[14,14],
             iconSize:null,
             popupAnchor:[0,0]
@@ -178,9 +178,9 @@
 
 .location-marker-text {
   padding-left: 5px;
-  color: black;
+  color: #555;
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 600;
 }
 
 </style>

@@ -1,18 +1,18 @@
 <template>
   <div class="header-bar">
     <div v-if="currentLocation === null">
-      <h4 style="display:flex; flex-direction:row; align-items:center; justify-content: center">
+      <h4 style="display:flex; flex-direction:row; align-items:flex-start">
         <span>Where is the Water Quality Worst?</span>
       </h4>
     </div>
 
     <div v-if="currentLocation !== null">
-      <h4 style="display:flex; flex-direction:row; align-items:center; justify-content: center">
+      <h4 style="display:flex; flex-direction:row; align-items:flex-start">
         <span>
-          <i class="fa fa-caret-left" @click="reset()"></i>
-          Back
+          <i class="fa fa-arrow-circle-left" style="font-size:125%" @click="reset()"></i>
         </span>
-
+        &nbsp; 
+        &nbsp; 
         <span>Who could be responsible for {{currentLocation.chemical}}</span>
         &nbsp; 
         <spark-line :data="currentLocation" :summary="true" style="width: 140px"/>
@@ -64,5 +64,6 @@ export default {
 h4 {
   margin: 0;
   padding: 5px;
+  height: 45px;
 }
 </style>
