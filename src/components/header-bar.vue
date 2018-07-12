@@ -13,7 +13,7 @@
         </span>
         &nbsp; 
         &nbsp; 
-        <span>Who could be responsible for {{currentLocation.chemical}}</span>
+        <span>Who could be responsible for {{currentLocation.chemical}}({{currentLocation.chemical | chem }})</span>
         &nbsp; 
         <spark-line :data="currentLocation" :summary="true" style="width: 140px"/>
         &nbsp;

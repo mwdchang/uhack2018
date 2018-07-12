@@ -1,7 +1,7 @@
 <template>
   <div ref="container" class="spark-container">
     <div v-if="summary === false" class="name-label">{{data.name}}</div>
-    <div v-if="summary === false" class="chemical-label">{{data.chemical}}</div>
+    <div v-if="summary === false" class="chemical-label">{{data.chemical | chem}}</div>
     <svg class="chart"></svg>
     <div class="delta-label">
       <div :class="{'positive': data.delta > 0, 'negative': data.delta <=0 }">{{deltaStr}}</div>
@@ -125,7 +125,7 @@ export default {
 
 .chemical-label {
   text-align: left;
-  width: 110px;
+  width: 40px;
   font-size: 80%;
 }
 

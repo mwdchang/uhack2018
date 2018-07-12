@@ -4,7 +4,7 @@
     <div v-if="!currentLocation">
       <div class="header"><i class="fa fa-tint"></i> <strong>Water Measures</strong>
         <br>
-        <small>Most increase in Arsenic, Chromium, Lead</small>
+        <small>Most increase in Arsenic({{"ARSENIC" | chem}}), Chromium({{"CHROMIUM" | chem}}) , Lead({{"LEAD" | chem}})</small>
       </div>
       <div v-for="(spark) of waterData500" :key="spark.vid">
         <div @click="switchLocation(spark)">
@@ -18,7 +18,7 @@
       <div class="header">
         <i class="fa fa-industry"></i> <strong>Facility Measures</strong>
         <br>
-        <small>Most increase in {{currentLocation.chemical}} from facilities within {{distanceFilter}}km</small>
+        <small>Most increase in {{currentLocation.chemical}} ({{currentLocation.chemical | chem }}) from facilities within {{distanceFilter}}km</small>
       </div>
       <div v-for="(spark) of facilityData500" :key="spark.vid">
         <div @click="switchFacility(spark)">
@@ -80,7 +80,7 @@ export default {
 <style>
 .side-panel {
   box-sizing: border-box;
-  width: 420px;
+  width: 380px;
   height: 100%;
   margin: 2px;
 
