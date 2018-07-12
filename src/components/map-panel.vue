@@ -138,6 +138,9 @@
 
         // TODO
         const weightFn = (f) => {
+          if (_.last(f.data) <= 0) {
+            return 1;
+          }
           return 1 + Math.log2(_.last(f.data));
         }
 
