@@ -3,7 +3,7 @@
     <!-- Show waters -->
     <div v-if="!currentLocation">
       <div class="header"><i class="fa fa-tint"></i> Water Measures</div>
-      <div v-for="(spark, idx) of waterData500" :key="idx">
+      <div v-for="(spark) of waterData500" :key="spark.vid">
         <div @click="switchLocation(spark)">
           <spark-line :data="spark"/>
         </div>
@@ -13,7 +13,7 @@
     <!-- Show facilities -->
     <div v-if="currentLocation">
       <div class="header"><i class="fa fa-industry"></i> Facility Measures</div>
-      <div v-for="(spark, idx) of facilityData500" :key="idx">
+      <div v-for="(spark) of facilityData500" :key="spark.vid">
         <div @click="switchFacility(spark)">
           <spark-line :data="spark"/>
         </div>
@@ -41,6 +41,7 @@ export default {
       currentLocation: 'currentLocation',
       currentFacility: 'currentFacility',
       currentChemical: 'currentChemical',
+      filterdFacilities: 'filterdFacilities',
       waterData: 'waters',
       facilityData: 'facilities'
     }),
@@ -48,7 +49,7 @@ export default {
       return _.take(this.waterData, 500);
     },
     facilityData500: function() {
-      return _.take(this.facilityData, 500);
+      return _.take(this.filterdFacilities, 500);
     }
   },
   methods: {

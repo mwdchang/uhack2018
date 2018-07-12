@@ -33,6 +33,8 @@ export default {
         const lastIdx = (w.data.length - 1);
         const delta = w.data[lastIdx] - w.data[0];
         w.delta = delta;
+
+        w.vid = w.chemical + w.id;
       });
       this.setWaters(_.sortBy(waters, (d) => -d.delta));
     });
@@ -43,6 +45,8 @@ export default {
         const lastIdx = f.data.length - 1;
         const delta = f.data[lastIdx] - f.data[0];
         f.delta = delta;
+
+        f.vid = f.chemical + f.id;
       });
       this.setFacilities( _.sortBy(facilities, (d) => -d.delta));
     });
