@@ -2,7 +2,7 @@
   <div class="side-panel">
     <!-- Show waters -->
     <div v-if="!currentLocation">
-      <div class="header"><i class="fa fa-tint"></i> <strong>Water Measures</strong>
+      <div class="header"><i class="fa fa-tint"></i><strong>&nbsp;Water Measures</strong>
         <br>
         <small>Most increase in Arsenic({{"ARSENIC" | chem}}), Chromium({{"CHROMIUM" | chem}}) , Lead({{"LEAD" | chem}})</small>
       </div>
@@ -16,7 +16,7 @@
     <!-- Show facilities -->
     <div v-if="currentLocation">
       <div class="header">
-        <i class="fa fa-industry"></i> <strong>Facility Measures</strong>
+        <i class="fa fa-industry"></i><strong>&nbsp;Facility Measures</strong>
         <br>
         <small>Most increase in {{currentLocation.chemical}} ({{currentLocation.chemical | chem }}) from facilities within {{distanceFilter}}km</small>
       </div>
