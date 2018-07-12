@@ -1,6 +1,9 @@
 ### Hackathon goal
 Correlate and visualize water quality with pollutions released by industry facilities.
 
+
+![image](image.png)
+
 ### Install UI Dependencies
 ```
 npm install
