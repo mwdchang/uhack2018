@@ -27,6 +27,7 @@
         currentChemical: 'currentChemical',
         waters: 'waters',
         facilities: 'facilities',
+        filterdFacilities: 'filterdFacilities'
       })
     },
     watch: {
@@ -96,8 +97,6 @@
 
       /* User click a water location spark line */
       locationChanged() {
-        const DIST = 25 * 1000; // 30 km
-
         this.cluster.clearLayers();
 
         const loc = this.currentLocation;
@@ -105,34 +104,32 @@
 
         this.map.setView(origin, 11);  // zoom of 11 gives us about 30 km radius
 
-        // TODO: filtering by distance and checmical
-        this.facilities.forEach( facility => {
+        this.filterdFacilities.forEach( facility => {
           const fLoc = new L.LatLng(facility.lat, facility.lon);
-          if (fLoc.distanceTo(origin) < DIST) {
-            const pointList = [origin, fLoc];
-            const line = new L.polyline(pointList, {
-              color: '#F0F',
-              weight: 2,
-              opacity: 0.5,
-              smoothFactor: 1
-            });
-            this.cluster.addLayer(line);
+          const pointList = [origin, fLoc];
+          const line = new L.polyline(pointList, {
+            color: '#F0F',
+            weight: 2,
+            opacity: 0.5,
+            smoothFactor: 1
+          });
+          this.cluster.addLayer(line);
 
-            let divIcon =L.divIcon({
-              className:'facility-marker-div-icon',
-              //html:'<i class="fa fa-industry fa-2x"></i><span class="location-marker-text">' + facility.name + '</span>',
-              html:'<i class="fa fa-industry fa-2x"></i>',
-              iconAnchor:[14,14],
-              iconSize:null,
-              popupAnchor:[0,0]
-            });
+          let divIcon =L.divIcon({
+            className:'facility-marker-div-icon',
+            //html:'<i class="fa fa-industry fa-2x"></i><span class="location-marker-text">' + facility.name + '</span>',
+            html:'<i class="fa fa-industry fa-2x"></i>',
+            iconAnchor:[14,14],
+            iconSize:null,
+            popupAnchor:[0,0]
+          });
 
-            let marker = L.marker([facility.lat, facility.lon], {
-              icon: divIcon,
-              //opacity: 0.3,
-            });
-            this.cluster.addLayer(marker);
-          }
+          let marker = L.marker([facility.lat, facility.lon], {
+            icon: divIcon,
+            //opacity: 0.3,
+          });
+          this.cluster.addLayer(marker);
+          
         })
         this.cluster.addTo(this.map);
       }

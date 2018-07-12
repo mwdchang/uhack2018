@@ -30,13 +30,13 @@ export const storeConfig = {
       commit('setCurrentLocation', o);
 
       // Auto compute filtered
-      const DIST = 30 * 1000; // filter distance
+      const DIST = 60 * 1000; // filter distance
       const r = [];
       const loc = state.currentLocation;
       const origin = new L.LatLng(loc.lat, loc.lon);
       state.facilities.forEach(facility => {
           const fLoc = new L.LatLng(facility.lat, facility.lon);
-          if (fLoc.distanceTo(origin) < DIST) {
+          if (fLoc.distanceTo(origin) < DIST && facility.chemical === loc.chemical) {
             r.push(facility);
           }
       });
