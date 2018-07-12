@@ -19,7 +19,7 @@
       this.waterMarkers = L.layerGroup();
 
       this.createMap();
-      this.addLocationMarkers(this.waters);
+      this.addLocationMarkers(this.waters, 'tint');
     },
     computed: {
       ...mapGetters({
@@ -36,8 +36,9 @@
         if (this.currentLocation !== null) {
           this.locationChanged();
         } else {
-          this.map.setView([43.6532, -79.3832], 9);
+          this.map.setView([43.6532, -79.3832], 8);
           this.cluster.clearLayers();
+          this.addLocationMarkers(this.waters, 'tint');
         }
       }
     },
@@ -59,7 +60,7 @@
         this.tileLayer.addTo(this.map);
       },
 
-      addLocationMarkers(waters) {
+      addLocationMarkers(waters, icon) {
         const CHEMS = {
           'ARSENIC': 'Ar',
           'CHROMIUM': 'Cr',
@@ -104,7 +105,7 @@
           let divIcon = L.divIcon({
             className:'water-marker-div-icon',
             //html:'<i class="fa fa-tint fa-2x"></i><span class="location-marker-text">' + uniqueWaters[k][0].name + '</span>',
-            html:'<i class="fa fa-tint fa-2x"></i>' + label,
+            html:'<i class="fa fa-'+icon+' fa-2x"></i>' + label,
             iconAnchor:[14,14],
             iconSize:null,
             popupAnchor:[0,0]
@@ -125,11 +126,14 @@
       /* User click a water location spark line */
       locationChanged() {
         this.cluster.clearLayers();
+        this.waterMarkers.clearLayers();
 
         const loc = this.currentLocation;
         const origin = new L.LatLng(loc.lat, loc.lon);
 
         this.map.setView(origin, 10);  // zoom of 8 gives us about 60 km radius
+
+        this.addLocationMarkers([loc], 'tint');
 
         // TODO
         const weightFn = (f) => {
@@ -150,20 +154,7 @@
             });
             this.cluster.addLayer(line);
 
-            let divIcon =L.divIcon({
-              className:'facility-marker-div-icon',
-              //html:'<i class="fa fa-industry fa-2x"></i><span class="location-marker-text">' + facility.name + '</span>',
-              html:'<i class="fa fa-industry fa-2x"><span class="location-marker-text">' + facility.name + '</span></i>',
-              iconAnchor:[14,14],
-              iconSize:null,
-              popupAnchor:[0,0]
-            });
-
-            let marker = L.marker([facility.lat, facility.lon], {
-              icon: divIcon,
-              //opacity: 0.3,
-            });
-            this.cluster.addLayer(marker);
+            this.addLocationMarkers([facility], 'industry');
           }
         })
         this.cluster.addTo(this.map);
@@ -203,8 +194,8 @@
   .location-marker-text {
     padding-left: 5px;
     color: #555;
-  //font-size: 14px;
-  //font-weight: 600;
+    font-size: 14px;
+    font-weight: 600;
   }
 
 </style>

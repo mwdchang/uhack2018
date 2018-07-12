@@ -13,7 +13,7 @@ export const storeConfig = {
     waters: null,
     facilities: null,
     filterdFacilities: null,
-    distanceFilter: 60
+    distanceFilter: 50
   },
   getters: {
     currentLocation: state => state.currentLocation,
@@ -44,7 +44,7 @@ export const storeConfig = {
       state.facilities.forEach(facility => {
           const fLoc = new L.LatLng(facility.lat, facility.lon);
           // if (fLoc.distanceTo(origin) < DIST && facility.chemical === loc.chemical) {
-          if (fLoc.distanceTo(origin) < DIST) { 
+          if (fLoc.distanceTo(origin) < DIST) {
             r.push(facility);
           }
       });
