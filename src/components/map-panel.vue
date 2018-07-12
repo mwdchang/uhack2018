@@ -149,7 +149,7 @@
             const pointList = [origin, fLoc];
             const line = new L.polyline(pointList, {
               color: '#555',
-              weight: 2, //weightFn(facility),
+              weight: weightFn(facility),
               opacity: 0.5,
               smoothFactor: 1
             });
