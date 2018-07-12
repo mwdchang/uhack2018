@@ -88,6 +88,7 @@ export default {
   border: 1px solid #ccc;
   box-sizing: border-box;
   cursor: pointer;
+  background: #FFF;
 }
 
 .line-facility {

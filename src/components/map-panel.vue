@@ -83,7 +83,7 @@
         const origin = new L.LatLng(loc.lat, loc.lon);
 
 
-        this.map.setView(origin, 11);  // zoom of 11 gives us about 30 km radius
+        this.map.setView(origin, 8);  // zoom of 8 gives us about 60 km radius
         const max = d3.max(this.filterdFacilities.map( f => _.last(f.data)));
 
         // TODO
@@ -126,14 +126,14 @@
 
 <style>
 .map-panel {
-  flex: 1;
+  position: relative;
   display: block;
   box-sizing: border-box;
   border: 1px solid #ccc;
   margin: 2px;
 
-  height: 800px;
-  width: 400px;
+  min-height: 600px;
+  width: 100%;
 }
 
 .water-marker-div-icon {

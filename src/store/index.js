@@ -12,7 +12,8 @@ export const storeConfig = {
     currentChemical: null,
     waters: null,
     facilities: null,
-    filterdFacilities: null
+    filterdFacilities: null,
+    distanceFilter: 60
   },
   getters: {
     currentLocation: state => state.currentLocation,
@@ -20,7 +21,8 @@ export const storeConfig = {
     currentChemical: state => state.currentChemical,
     waters: state => state.waters,
     facilities: state => state.facilities,
-    filterdFacilities: state => state.filterdFacilities
+    filterdFacilities: state => state.filterdFacilities,
+    distanceFilter: state => state.distanceFilter
   },
   actions: {
     setCurrentFacility({ commit }, o) {
@@ -29,8 +31,13 @@ export const storeConfig = {
     setCurrentLocation({ commit, state }, o) {
       commit('setCurrentLocation', o);
 
+      if (o === null) {
+        commit('setFilterdFacilities', state.facilities);
+        return;
+      }
+
       // Auto compute filtered
-      const DIST = 60 * 1000; // filter distance
+      const DIST = state.distanceFilter * 1000; // filter distance
       const r = [];
       const loc = state.currentLocation;
       const origin = new L.LatLng(loc.lat, loc.lon);

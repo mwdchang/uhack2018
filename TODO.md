@@ -3,7 +3,6 @@
 - Pagination through facilities - DANIEL
 
 ## Parsing
-- Faciities parsing  - JAMES
 - Facility meta data (for general information)
 
 ## Map
@@ -13,7 +12,6 @@
 
 ## Map links
 - Try correlation (opacity PCC) on the links - DANIEL
-- Thickness map to last year amount - DANIEL
 - Blur lines to show uncertainty (correlation)
 
 

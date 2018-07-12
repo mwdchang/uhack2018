@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="header-bar">
     <div v-if="currentLocation === null">
       <h4 style="display:flex; flex-direction:row; align-items:center; justify-content: center">
         <span>Where is the Water Quality Worst?</span>
@@ -20,17 +20,6 @@
         <span> increase in {{ currentLocation.name }} ?</span>
       </h4>
     </div>
-
-    <!--
-    <div>
-      <span>
-        <span v-if="currentLocation">{{currentLocation.name}}</span> - 
-        <span v-if="currentChemical">{{currentChemical}}</span> - 
-        <span v-if="currentFacility">{{currentFacility.name}}</span>
-      </span>
-      <button v-if="currentLocation" class="btn btn-primary btn-sm" @click="reset()">Back</button>
-    </div>
-    -->
   </div>
 </template>
 
@@ -67,4 +56,13 @@ export default {
 </script>
 
 <style>
+.header-bar {
+  background: #353752;
+  color: #EFEFEF;
+}
+
+h4 {
+  margin: 0;
+  padding: 5px;
+}
 </style>

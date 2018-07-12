@@ -1,9 +1,13 @@
 <template>
   <div v-if="waterData && facilityData">
     <header-bar/>
-    <div class="container">
-      <side-panel/>
-      <map-panel/>
+    <div class="main-container">
+      <div style="height:100%">
+        <side-panel/>
+      </div>
+      <div style="flex:1">
+        <map-panel/>
+      </div>
     </div>
     <facility-dialog/>
   </div>
@@ -75,7 +79,7 @@ export default {
 
 <style>
 
-.container {
+.main-container {
   display: flex;
   flex-direction: row;
   height: 100%;
