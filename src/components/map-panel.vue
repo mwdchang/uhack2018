@@ -19,7 +19,7 @@
       this.waterMarkers = L.layerGroup();
 
       this.createMap();
-      this.addLocationMarkers(this.waters, 'tint');
+      this.addLocationMarkers(this.waters, 'water', 'tint');
     },
     computed: {
       ...mapGetters({
@@ -38,7 +38,8 @@
         } else {
           this.map.setView([43.6532, -79.3832], 8);
           this.cluster.clearLayers();
-          this.addLocationMarkers(this.waters, 'tint');
+          this.waterMarkers.clearLayers();
+          this.addLocationMarkers(this.waters, 'water', 'tint');
         }
       }
     },
@@ -60,7 +61,7 @@
         this.tileLayer.addTo(this.map);
       },
 
-      addLocationMarkers(waters, icon) {
+      addLocationMarkers(waters, type, icon) {
         const CHEMS = {
           'ARSENIC': 'Ar',
           'CHROMIUM': 'Cr',
@@ -103,9 +104,9 @@
             label += '<span style="font-weight: ' + weight + '; font-size: '+size+'px" class="location-marker-text">' + CHEMS[chem.chemical] + '</span>';
           });
           let divIcon = L.divIcon({
-            className:'water-marker-div-icon',
+            className: type+'-marker-div-icon',
             //html:'<i class="fa fa-tint fa-2x"></i><span class="location-marker-text">' + uniqueWaters[k][0].name + '</span>',
-            html:'<i class="fa fa-'+icon+' fa-2x"></i>' + label,
+            html:'<i class="fa fa-'+icon+' fa-2x"></i> ' + label,
             iconAnchor:[14,14],
             iconSize:null,
             popupAnchor:[0,0]
@@ -133,7 +134,7 @@
 
         this.map.setView(origin, 10);  // zoom of 8 gives us about 60 km radius
 
-        this.addLocationMarkers([loc], 'tint');
+        this.addLocationMarkers([loc], 'water', 'tint');
 
         // TODO
         const weightFn = (f) => {
@@ -154,7 +155,7 @@
             });
             this.cluster.addLayer(line);
 
-            this.addLocationMarkers([facility], 'industry');
+            this.addLocationMarkers([facility], 'facility', 'industry');
           }
         })
         this.cluster.addTo(this.map);
@@ -192,7 +193,7 @@
   }
 
   .location-marker-text {
-    padding-left: 5px;
+    //padding-left: 5px;
     color: #555;
     font-size: 14px;
     font-weight: 600;
