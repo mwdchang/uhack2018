@@ -40,10 +40,6 @@ export default {
     API.getFacilities().then(d=>d.json()).then( facilities => {
       // TODO: FAKE
       facilities.forEach (f => {
-        f.data = [];
-        for (let i=0; i < 10; i++) {
-          f.data.push( Math.random() * 10);
-        }
         const lastIdx = f.data.length - 1;
         const delta = f.data[lastIdx] - f.data[0];
         f.delta = delta;
