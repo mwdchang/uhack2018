@@ -34,6 +34,7 @@
         if (this.currentLocation !== null) {
           this.locationChanged();
         } else {
+          this.map.setView([43.6532, -79.3832], 9);
           this.cluster.clearLayers();
         }
       }
@@ -59,6 +60,7 @@
       addLocationMarkers() {
         API.getWater().then(d=>d.json()).then(waters => {
           waters.forEach( water => {
+            console.log(water);
             let divIcon =L.divIcon({
               className:'water-marker-div-icon',
               html:'<i class="fa fa-tint fa-2x"></i><span class="location-marker-text">' + water.name + '</span>',
@@ -73,35 +75,35 @@
           });
         });
 
-        API.getFacilities().then(d=>d.json()).then(facilities => {
-          facilities.forEach( facility => {
-            let divIcon =L.divIcon({
-              className:'facility-marker-div-icon',
-              //html:'<i class="fa fa-industry fa-2x"></i><span class="location-marker-text">' + facility.name + '</span>',
-              html:'<i class="fa fa-industry fa-2x"></i>',
-              iconAnchor:[14,14],
-              iconSize:null,
-              popupAnchor:[0,0]
-            });
-
-            L.marker([facility.lat, facility.lon], {
-              icon: divIcon,
-              opacity: 0.3,
-            }).addTo(this.map);
-          });
-        });
+        // API.getFacilities().then(d=>d.json()).then(facilities => {
+        //   facilities.forEach( facility => {
+        //     let divIcon =L.divIcon({
+        //       className:'facility-marker-div-icon',
+        //       //html:'<i class="fa fa-industry fa-2x"></i><span class="location-marker-text">' + facility.name + '</span>',
+        //       html:'<i class="fa fa-industry fa-2x"></i>',
+        //       iconAnchor:[14,14],
+        //       iconSize:null,
+        //       popupAnchor:[0,0]
+        //     });
+        //
+        //     L.marker([facility.lat, facility.lon], {
+        //       icon: divIcon,
+        //       opacity: 0.3,
+        //     }).addTo(this.map);
+        //   });
+        // });
       },
 
       /* User click a water location spark line */
       locationChanged() {
-        const DIST = 30 * 1000; // 100 km
+        const DIST = 25 * 1000; // 30 km
 
         this.cluster.clearLayers();
 
         const loc = this.currentLocation;
         const origin = new L.LatLng(loc.lat, loc.lon);
 
-        this.map.panTo(origin);
+        this.map.setView(origin, 11);  // zoom of 11 gives us about 30 km radius
 
         // TODO: filtering by distance and checmical
         this.facilities.forEach( facility => {
@@ -115,6 +117,21 @@
               smoothFactor: 1
             });
             this.cluster.addLayer(line);
+
+            let divIcon =L.divIcon({
+              className:'facility-marker-div-icon',
+              //html:'<i class="fa fa-industry fa-2x"></i><span class="location-marker-text">' + facility.name + '</span>',
+              html:'<i class="fa fa-industry fa-2x"></i>',
+              iconAnchor:[14,14],
+              iconSize:null,
+              popupAnchor:[0,0]
+            });
+
+            let marker = L.marker([facility.lat, facility.lon], {
+              icon: divIcon,
+              //opacity: 0.3,
+            });
+            this.cluster.addLayer(marker);
           }
         })
         this.cluster.addTo(this.map);
