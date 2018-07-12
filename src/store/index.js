@@ -43,7 +43,8 @@ export const storeConfig = {
       const origin = new L.LatLng(loc.lat, loc.lon);
       state.facilities.forEach(facility => {
           const fLoc = new L.LatLng(facility.lat, facility.lon);
-          if (fLoc.distanceTo(origin) < DIST && facility.chemical === loc.chemical) {
+          // if (fLoc.distanceTo(origin) < DIST && facility.chemical === loc.chemical) {
+          if (fLoc.distanceTo(origin) < DIST) { 
             r.push(facility);
           }
       });

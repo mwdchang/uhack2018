@@ -108,23 +108,26 @@
 
 
         this.map.setView(origin, 8);  // zoom of 8 gives us about 60 km radius
-        const max = d3.max(this.filterdFacilities.map( f => _.last(f.data)));
 
         // TODO
         const weightFn = (f) => {
           return 1 + Math.log2(_.last(f.data));
         }
 
+        // Show all close by facilities but only draw lines if the chemical match
         this.filterdFacilities.forEach( facility => {
           const fLoc = new L.LatLng(facility.lat, facility.lon);
-          const pointList = [origin, fLoc];
-          const line = new L.polyline(pointList, {
-            color: '#555',
-            weight: weightFn(facility),
-            opacity: 0.5,
-            smoothFactor: 1
-          });
-          this.cluster.addLayer(line);
+
+          if (facility.chemical == this.currentLocation.chemical) {
+            const pointList = [origin, fLoc];
+            const line = new L.polyline(pointList, {
+              color: '#555',
+              weight: weightFn(facility),
+              opacity: 0.5,
+              smoothFactor: 1
+            });
+            this.cluster.addLayer(line);
+          }
 
           let divIcon =L.divIcon({
             className:'facility-marker-div-icon',
