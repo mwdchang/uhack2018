@@ -1,4 +1,4 @@
-package main
+package parse
 
 import (
 	"fmt"
@@ -31,10 +31,37 @@ func Pollutants() []MeasuredLocation {
 	}
 
 	// TEST
-	pollutants := getPollutants()
-	fmt.Print(pollutants)
+	disposals := getDisposals()
+	disposalResults := combineDisposals(disposals)
 
-	return mls
+	var theResults []MeasuredLocation
+	for _, result := range disposalResults {
+		var theLocation *MeasuredLocation
+		for i := range mls {
+			if mls[i].ID == result.ID {
+				theLocation = &mls[i]
+				break
+			}
+		}
+
+		if theLocation == nil {
+			continue
+		}
+
+		res := MeasuredLocation{
+			ID:       theLocation.ID,
+			Lat:      theLocation.Lat,
+			Lon:      theLocation.Lon,
+			Name:     theLocation.Name,
+			Type:     theLocation.Type,
+			Chemical: result.Material,
+			Data:     result.Quantities,
+		}
+
+		theResults = append(theResults, res)
+	}
+
+	return theResults
 }
 
 // TestSites gets a list of test sites
@@ -91,12 +118,11 @@ func TestSites() []MeasuredLocation {
 		theResults = append(theResults, ml)
 	}
 
-	// fmt.Print(theResults)
-
 	return theResults
 }
 
 // WATER
+
 // Test represents a single test for a given station
 type Test struct {
 	Station string
@@ -113,6 +139,7 @@ type TestResults struct {
 }
 
 // POLLUTION
+
 // Disposal represents a single disposal for a given facility
 // Same as Test but with appropriate business names
 type Disposal struct {
@@ -122,7 +149,7 @@ type Disposal struct {
 	Material string
 }
 
-// DisposalResult represents all the disposal values for a given station
+// DisposalResults represents all the disposal values for a given station
 // Similar to TestResults but with appropriate business names
 type DisposalResults struct {
 	ID         string
@@ -160,24 +187,19 @@ func combineTests(tests []Test) []TestResults {
 	//      station    param      year
 	tmp := make(map[string]map[string]map[int][]float64)
 	for _, test := range tests {
-		// fmt.Printf("%+v\n", test)
 		_, ok := tmp[test.Station]
 		// make a station if it's not available
 		if !ok {
-			// fmt.Println("wasn't a station")
 			tmp[test.Station] = make(map[string]map[int][]float64)
 		}
 
 		// make a param if it's not available
 		key := getKey(test.Param)
-		// fmt.Printf("key is %s\n", key)
 		_, ok = tmp[test.Station][key]
 		if !ok {
-			// fmt.Println("wasn't a param")
 			tmp[test.Station][key] = make(map[int][]float64)
 		}
 
-		// fmt.Println(test.Year)
 		_, ok = tmp[test.Station][key][test.Year]
 		if !ok {
 			tmp[test.Station][key][test.Year] = []float64{test.Result}
@@ -186,13 +208,10 @@ func combineTests(tests []Test) []TestResults {
 		}
 	}
 
-	//fmt.Printf("%+v\n", tmp)
-
 	var testResults []TestResults
 	for st, t := range tmp { // t -> station
 
 		for pa, p := range t { // p -> param
-			// fmt.Println("Param is %s\n", pa)
 			result := TestResults{
 				Station: st,
 				Param:   pa,
@@ -216,8 +235,6 @@ func combineTests(tests []Test) []TestResults {
 
 	}
 
-	// fmt.Printf("%+v\n", testResults)
-
 	return testResults
 }
 
@@ -236,7 +253,7 @@ func getKey(code string) string {
 	panic(fmt.Sprintf("Unknown code %s\n", code))
 }
 
-func getPollutants() []Disposal {
+func getDisposals() []Disposal {
 	dat, err := ioutil.ReadFile("./data/disposal-on-on-site.csv")
 	if err != nil {
 		panic(err)
@@ -257,11 +274,44 @@ func getPollutants() []Disposal {
 			Material: strings.TrimSpace(fields[4]),
 		}
 
-		fmt.Print(disposal)
-
 		disposals = append(disposals, disposal)
 	}
 
-	fmt.Printf("length of disposals: %d\n", len(disposals))
 	return disposals
+}
+
+func combineDisposals(disposals []Disposal) []DisposalResults {
+	tmp := make(map[string]map[string][]float64)
+
+	for _, disposal := range disposals {
+		if disposal.Year < 2000 || disposal.Year > 2016 {
+			continue
+		}
+		_, ok := tmp[disposal.ID]
+		if !ok {
+			tmp[disposal.ID] = make(map[string][]float64)
+		}
+
+		_, ok = tmp[disposal.ID][disposal.Material]
+		if !ok {
+			tmp[disposal.ID][disposal.Material] = make([]float64, 17)
+		}
+
+		idx := disposal.Year - 2000
+		tmp[disposal.ID][disposal.Material][idx] = disposal.Quantity
+	}
+
+	var results []DisposalResults
+
+	for t := range tmp {
+		for u := range tmp[t] {
+			results = append(results, DisposalResults{
+				ID:         t,
+				Material:   u,
+				Quantities: tmp[t][u],
+			})
+		}
+	}
+
+	return results
 }
