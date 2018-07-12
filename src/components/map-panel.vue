@@ -16,6 +16,7 @@
 
     mounted() {
       this.cluster = L.layerGroup();
+      this.waterMarkers = L.layerGroup();
 
       this.createMap();
       this.addLocationMarkers();
@@ -59,19 +60,42 @@
       },
 
       addLocationMarkers() {
-        this.waters.forEach(water => {
-          let divIcon =L.divIcon({
+        const CHEMS = {
+          'ARSENIC': 'Ar',
+          'CHROMIUM': 'Cr',
+          'LEAD': 'Pb'
+        };
+        let uniqueWaters = {};
+        this.waters.forEach( water => {
+          if (water.id in uniqueWaters) {
+            uniqueWaters[water.id].push(water);
+          } else {
+            uniqueWaters[water.id] = [water]
+          }
+        });
+        Object.keys(uniqueWaters).forEach((k) => {
+          let label = ''
+          uniqueWaters[k].forEach((chem) => {
+            label += CHEMS[chem.chemical];
+          });
+          let divIcon = L.divIcon({
             className:'water-marker-div-icon',
-            html:'<i class="fa fa-tint fa-2x"></i><span class="location-marker-text">' + water.name + '</span>',
+            //html:'<i class="fa fa-tint fa-2x"></i><span class="location-marker-text">' + uniqueWaters[k][0].name + '</span>',
+            html:'<i class="fa fa-tint fa-2x"></i><span class="location-marker-text">' + label + '</span>',
             iconAnchor:[14,14],
             iconSize:null,
             popupAnchor:[0,0]
           });
 
-          L.marker([water.lat, water.lon], {
+          let marker = L.marker([uniqueWaters[k][0].lat, uniqueWaters[k][0].lon], {
             icon: divIcon
-          }).addTo(this.map);
+          }).bindPopup(uniqueWaters[k][0].name);
+
+          this.waterMarkers.addLayer(marker);
+
         });
+        this.waterMarkers.addTo(this.map);
+
 
       },
 
@@ -116,7 +140,7 @@
             //opacity: 0.3,
           });
           this.cluster.addLayer(marker);
-          
+
         })
         this.cluster.addTo(this.map);
       }
